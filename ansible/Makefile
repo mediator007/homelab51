@@ -1,23 +1,24 @@
-# Путь к приватному ключу внутри проекта
 SSH_KEY=ssh/id_homelab
 
-# Путь к директории проекта (текущая)
 PROJECT_DIR=$(shell pwd)
 
-# Docker образ с Ansible
-ANSIBLE_IMAGE=cytopia/ansible:latest
+ANSIBLE_IMAGE=homelab-ansible:latest
 
-# Inventory для Ansible
 INVENTORY=inventory.ini
 
-.PHONY: ping
+.PHONY: build ping
 
-ping:
-	@echo "Проверка связи с homelab через Ansible"
+build:
+	@echo "Собираем Docker образ ansible-ssh:latest..."
+	docker build -t $(ANSIBLE_IMAGE) .
+
+ping: build
+	@mkdir -p $(PROJECT_DIR)/ssh
+	@echo "Проверка связи с homelab через Ansible..."
 	docker run --rm \
 		-v $(PROJECT_DIR):/work \
-		-v $(PROJECT_DIR)/$(SSH_KEY):/$(SSH_KEY):ro \
+		-v $(PROJECT_DIR)/$(SSH_KEY):/ssh/id_homelab:ro \
 		$(ANSIBLE_IMAGE) \
-		ansible homelab -i /work/$(INVENTORY) -m ping -u viktor --private-key /$(SSH_KEY)
+		ansible homelab -i /work/$(INVENTORY) -m ping -u viktor --private-key /ssh/id_homelab
 
 

@@ -1,26 +1,8 @@
 # Плейбук для раскатки софта на homelab сервер
 
 ## Запуск playbook
-- Выбрать используемый образ, например `cytopia/ansible:latest`  
-- Выполнить команду из текущей директории:  
-```sh
-mkdir -p ssh && \
-docker run -it --rm \
-  -v $(pwd):/work \
-  -v $(pwd)/ssh/id_homelabhomelab51_id_rsa.private:/ssh/homelab51_id_rsa.private:ro \
-  cytopia/ansible:latest \
-  bash
-```
-- В контейнере:  
-```sh
-cd /work
-
-# Проверяем связь с homelab
-ansible homelab -m ping
-
-# Запуск плейбука
-ansible-playbook playbooks/<playbook>.yaml
-```
+- Скопировать ssh ключ для доступа к homelab в директорию по пути  homelab/ansible/ssh/id_homelab  
+- Запустить make target с необходимым плейбуком
 
 
 ## Требования для таргет хоста (homelab)
