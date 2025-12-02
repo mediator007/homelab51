@@ -1,9 +1,9 @@
 # Плейбук для раскатки софта на homelab сервер
 
 ## Запуск playbook
-- Выбрать используемый образ, например `cytopia/ansible:latest`
-- Копировать ssh ключ в homelab/ansible/ssh  
-- Выполнить команду из текущей директории:
+- Выбрать используемый образ, например `cytopia/ansible:latest`  
+- Копировать ssh ключ в homelab/ansible/ssh (имя ключа должно соответствовать имени из inventory.ini)   
+- Выполнить команду из текущей директории:  
 ```sh
 docker run -it --rm \
   -v $(pwd):/work \
