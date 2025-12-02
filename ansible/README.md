@@ -2,12 +2,12 @@
 
 ## Запуск playbook
 - Выбрать используемый образ, например `cytopia/ansible:latest`  
-- Копировать ssh ключ в homelab/ansible/ssh (имя ключа должно соответствовать имени из inventory.ini)   
 - Выполнить команду из текущей директории:  
 ```sh
+mkdir -p ssh && \
 docker run -it --rm \
   -v $(pwd):/work \
-  -v $(pwd)/ssh/id_homelab:/ssh/id_homelab:ro \
+  -v $(pwd)/ssh/id_homelabhomelab51_id_rsa.private:/ssh/homelab51_id_rsa.private:ro \
   cytopia/ansible:latest \
   bash
 ```
