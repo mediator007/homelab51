@@ -1,4 +1,4 @@
-SSH_KEY=ssh/id_homelab
+SSH_KEY=secrets/id_homelab
 
 PROJECT_DIR=$(shell pwd)
 
@@ -13,12 +13,19 @@ build:
 	docker build -t $(ANSIBLE_IMAGE) .
 
 ping: build
-	@mkdir -p $(PROJECT_DIR)/ssh
 	@echo "Проверка связи с homelab через Ansible..."
 	docker run --rm \
 		-v $(PROJECT_DIR):/work \
-		-v $(PROJECT_DIR)/$(SSH_KEY):/ssh/id_homelab:ro \
+		-v $(PROJECT_DIR)/$(SSH_KEY):/secrets/id_homelab:ro \
 		$(ANSIBLE_IMAGE) \
-		ansible homelab -i /work/$(INVENTORY) -m ping -u viktor --private-key /ssh/id_homelab
+		ansible homelab -i /work/$(INVENTORY) -m ping -u viktor --private-key /secrets/id_homelab
 
-
+docker:
+	@echo "Накатываем Docker на homelab через Ansible"
+	docker run --rm \
+		-v $(PROJECT_DIR):/work \
+		-v $(PROJECT_DIR)/secrets/id_homelab:/secrets/id_homelab:ro \
+		homelab-ansible:latest \
+		ansible-playbook /work/playbooks/docker.yaml -i /work/$(INVENTORY) -u viktor \
+			--private-key /secrets/id_homelab \
+			--become --become-password-file secrets/become
