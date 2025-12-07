@@ -9,6 +9,10 @@ RUN apt-get update && \
         sudo && \
         apt-get clean && rm -rf /var/lib/apt/lists/*
 
+COPY requirements.yml /tmp/requirements.yml
+
+RUN ansible-galaxy collection install -r /tmp/requirements.yml
+
 RUN pip install --no-cache-dir ansible
 
 WORKDIR /work
