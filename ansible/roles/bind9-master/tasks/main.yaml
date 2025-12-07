@@ -1,0 +1,36 @@
+---
+
+- name: Create bind directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  loop:
+    - /opt/bind/etc
+    - /opt/bind/zones
+
+- name: Deploy BIND configuration files
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0644"
+  loop:
+    - { src: "named.conf.j2",         dest: "/opt/bind/etc/named.conf" }
+    - { src: "named.conf.local.j2",   dest: "/opt/bind/etc/named.conf.local" }
+    - { src: "named.conf.options.j2", dest: "/opt/bind/etc/named.conf.options" }
+    - { src: "db.homelab.local.j2",   dest: "/opt/bind/zones/db.homelab.local" }
+
+- name: Copy docker-compose
+  ansible.builtin.copy:
+    src: docker-compose.yaml
+    dest: /opt/bind/docker-compose.yaml
+    mode: "0644"
+
+- name: Start bind9 with docker compose
+  ansible.builtin.shell: |
+    docker compose -f /opt/bind/docker-compose.yaml up -d
+  args:
+    executable: /bin/bash
+

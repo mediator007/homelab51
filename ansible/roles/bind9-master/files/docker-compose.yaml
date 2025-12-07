@@ -1,0 +1,18 @@
+services:
+  bind9:
+    image: internetsystemsconsortium/bind9:9.18
+    container_name: bind9-master
+    restart: unless-stopped
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    volumes:
+      - /opt/bind/etc:/etc/bind
+      - /opt/bind/zones:/var/lib/bind
+    networks:
+      - homelab
+
+networks:
+  homelab:
+    driver: bridge
+

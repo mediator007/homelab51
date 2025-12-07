@@ -1,0 +1,17 @@
+$TTL 3600
+@   IN SOA ns1.homelab.local. admin.homelab.local. (
+        {{ serial | default(2025021401) }}
+        3600
+        1800
+        1209600
+        86400
+)
+
+    IN NS ns1.homelab.local.
+    IN NS ns2.homelab.local.
+
+ns1 IN A 192.168.50.10
+ns2 IN A 192.168.50.11
+
+router  IN A 192.168.0.1
+nas     IN A 192.168.50.10

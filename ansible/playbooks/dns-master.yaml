@@ -1,0 +1,7 @@
+- name: Install BIND9 master
+  hosts: homelab
+  become: yes
+
+  roles:
+    - bind9-master
+

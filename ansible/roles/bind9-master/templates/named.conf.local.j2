@@ -1,0 +1,6 @@
+zone "homelab.local" {
+    type master;
+    file "/var/lib/bind/db.homelab.local";
+    allow-transfer { 192.168.50.11; };   // slave dns server
+};
+
